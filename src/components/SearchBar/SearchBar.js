@@ -13,7 +13,7 @@ class SearchBar extends React.Component {
 
     this.handleTermChange = this.handleTermChange.bind(this);
     this.handleLocationChange = this.handleLocationChange.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
+    this.validateSearch = this.validateSearch.bind(this);
     this.handleSortByChange = this.handleSortByChange.bind(this);
 
     this.sortByOptions = {
@@ -42,11 +42,15 @@ class SearchBar extends React.Component {
     this.setState({location: event.target.value});
   }
 
-  handleSearch(event) {
-    this.props.searchYelp(this.state.term, this.state.location, this.state.sortBy);
-    //console.log(Yelp);
-
-    event.preventDefault();
+  validateSearch(event) {
+    if (this.state.term && this.state.location != "" ) {
+      this.props.searchYelp(this.state.term, this.state.location, this.state.sortBy);
+      event.preventDefault();
+    } else if (this.state.location == "" && this.state.term != '') {
+      console.log('you must enter a loation');
+    } else {
+      console.log('make sure you fill out both search fields')
+    }
   }
 
   renderSortByOptions() {
@@ -62,18 +66,18 @@ class SearchBar extends React.Component {
 
   render() {
     return (
-      <div className="SearchBar">
-        <div className="SearchBar-sort-options">
+      <div className="searchbar">
+        <div className="searchbar-sort-options">
           <ul>
             {this.renderSortByOptions()}
           </ul>
         </div>
-        <div className="SearchBar-fields">
+        <div className="searchbar-fields">
           <input placeholder="Search Businesses" onChange={this.handleTermChange} />
           <input placeholder="Where?" onChange={this.handleLocationChange}/>
         </div>
-        <div className="SearchBar-submit">
-          <a onClick={this.handleSearch}>Let's Go</a>
+        <div className="searchbar-submit">
+          <a onClick={this.validateSearch}>Let's Go</a>
         </div>
       </div>
     );
